@@ -2,3 +2,8 @@ plugins:
   surveys_enabled:
     default: false
     client: true
+  public_survey_post_ids:
+    default: ""
+    type: list
+    list_type: simple
+    description: "Post IDs where anonymous (not logged in) users can submit survey responses. Comma-separated."

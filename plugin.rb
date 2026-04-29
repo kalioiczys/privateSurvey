@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-# name: discourse-surveys
-# about: Discourse plugin to create surveys.
+# name: privateSurvey
+# about: Discourse plugin to create surveys that can be accessed under certain conditions.
 # version: 0.1
-# authors: Arpit Jalan
-# url: https://github.com/discourse-org/discourse-surveys
+# authors: Kali
+# url: https://github.com/kalioiczys/privateSurvey
 
 enabled_site_setting :surveys_enabled
 

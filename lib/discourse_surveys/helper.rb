@@ -5,8 +5,6 @@ module DiscourseSurveys
     VALID_FIELD_TYPES = %w[radio checkbox dropdown textarea number star thumbs].freeze
     FIELDS_WITH_OPTIONS = %w[radio checkbox dropdown].freeze
 
-    ANONYMOUS_SURVEY_POST_ID = 56
-
     class << self
       def cook_question(text)
         return "" if text.blank?
@@ -88,8 +86,9 @@ module DiscourseSurveys
           end
 
           if anonymous
-            # Anonymous submissions only allowed on the designated post
-            unless post_id.to_i == ANONYMOUS_SURVEY_POST_ID
+            # Anonymous submissions only allowed on posts listed in site setting
+            allowed_ids = SiteSetting.public_survey_post_ids.split("|").map(&:to_i)
+            unless allowed_ids.include?(post_id.to_i)
               raise Discourse::NotLoggedIn
             end
           else
