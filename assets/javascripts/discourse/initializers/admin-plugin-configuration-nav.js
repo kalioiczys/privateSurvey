@@ -10,7 +10,7 @@ export default {
     }
 
     withPluginApi((api) => {
-      api.addAdminPluginConfigurationNav("discourse-surveys", [
+      api.addAdminPluginConfigurationNav("privateSurvey", [
         {
           label: "discourse_surveys.admin.export_tab",
           route: "adminPlugins.show.discourse-surveys-export",

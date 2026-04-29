@@ -3,6 +3,6 @@ import DiscourseRoute from "discourse/routes/discourse";
 
 export default class DiscourseSurveysExport extends DiscourseRoute {
   model() {
-    return ajax("/admin/plugins/discourse-surveys/surveys");
+    return ajax("/admin/plugins/privateSurvey/surveys");
   }
 }

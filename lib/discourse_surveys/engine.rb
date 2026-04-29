@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DiscourseSurveys
-  PLUGIN_NAME = "discourse-surveys".freeze
+  PLUGIN_NAME = "privateSurvey".freeze
   HAS_SURVEYS = "has_surveys"
   DEFAULT_SURVEY_NAME = "survey"
   DATA_PREFIX = "data-survey-"

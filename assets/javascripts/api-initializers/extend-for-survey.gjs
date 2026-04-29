@@ -12,7 +12,7 @@ const SurveyShim = <template>
 
 export default apiInitializer((api) => {
   api.modifyClass("controller:topic", {
-    pluginId: "discourse-surveys",
+    pluginId: "privateSurvey",
     subscribe() {
       this._super(...arguments);
       this.messageBus.subscribe("/surveys/" + this.get("model.id"), (msg) => {

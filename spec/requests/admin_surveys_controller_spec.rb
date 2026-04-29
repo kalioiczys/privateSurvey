@@ -17,7 +17,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
   describe "#index" do
     context "when not logged in" do
       it "returns 404" do
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         expect(response.status).to eq(404)
       end
     end
@@ -26,7 +26,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
       before { sign_in(user) }
 
       it "returns 404" do
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         expect(response.status).to eq(404)
       end
     end
@@ -35,7 +35,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
       before { sign_in(admin) }
 
       it "returns an empty list when no surveys exist" do
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         expect(response.status).to eq(200)
         expect(response.parsed_body["surveys"]).to eq([])
       end
@@ -51,7 +51,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
           [/survey]
         MD
 
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         expect(response.status).to eq(200)
 
         surveys = response.parsed_body["surveys"]
@@ -82,7 +82,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
           user,
         )
 
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         expect(response.parsed_body["surveys"][0]["response_count"]).to eq(1)
       end
 
@@ -99,7 +99,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
           MD
         end
 
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         body = response.parsed_body
         expect(body["surveys"].length).to eq(DiscourseSurveys::AdminSurveysController::PAGE_SIZE)
         expect(body["total_rows_surveys"]).to eq(
@@ -107,7 +107,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
         )
         expect(body["load_more_surveys"]).to include("page=1")
 
-        get "/admin/plugins/discourse-surveys/surveys.json?page=1"
+        get "/admin/plugins/privateSurvey/surveys.json?page=1"
         body = response.parsed_body
         expect(body["surveys"].length).to eq(1)
         expect(body["load_more_surveys"]).to be_nil
@@ -125,7 +125,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
 
         post_record.trash!
 
-        get "/admin/plugins/discourse-surveys/surveys.json"
+        get "/admin/plugins/privateSurvey/surveys.json"
         expect(response.parsed_body["surveys"]).to eq([])
       end
     end
@@ -134,7 +134,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
   describe "#export_csv" do
     context "when not logged in" do
       it "returns 404" do
-        get "/admin/plugins/discourse-surveys/surveys/999/export-csv"
+        get "/admin/plugins/privateSurvey/surveys/999/export-csv"
         expect(response.status).to eq(404)
       end
     end
@@ -143,7 +143,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
       before { sign_in(admin) }
 
       it "returns 404 for non-existent survey" do
-        get "/admin/plugins/discourse-surveys/surveys/999/export-csv"
+        get "/admin/plugins/privateSurvey/surveys/999/export-csv"
         expect(response.status).to eq(404)
       end
 
@@ -157,7 +157,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
           [/survey]
         MD
 
-        get "/admin/plugins/discourse-surveys/surveys/#{survey.id}/export-csv"
+        get "/admin/plugins/privateSurvey/surveys/#{survey.id}/export-csv"
         expect(response.status).to eq(200)
         expect(response.headers["Content-Type"]).to include("text/csv")
         expect(response.headers["Content-Disposition"]).to include("attachment")
@@ -190,7 +190,7 @@ RSpec.describe DiscourseSurveys::AdminSurveysController do
           user,
         )
 
-        get "/admin/plugins/discourse-surveys/surveys/#{survey.id}/export-csv"
+        get "/admin/plugins/privateSurvey/surveys/#{survey.id}/export-csv"
         expect(response.status).to eq(200)
 
         csv = CSV.parse(response.body)

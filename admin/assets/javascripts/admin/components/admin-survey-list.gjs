@@ -12,7 +12,7 @@ export default class AdminSurveyList extends Component {
     try {
       window.open(
         getURL(
-          `/admin/plugins/discourse-surveys/surveys/${surveyId}/export-csv`
+          `/admin/plugins/privateSurvey/surveys/${surveyId}/export-csv`
         ),
         "_blank"
       );

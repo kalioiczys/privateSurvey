@@ -7,7 +7,7 @@ en:
       survey_submitted: "Response has been submitted successfully!"
       user_responded: "You have already taken this survey."
       admin:
-        title: "Surveys"
+        title: "privateSurveys"
         description: "Manage surveys and export response data."
         survey_name: "Survey"
         topic: "Topic"

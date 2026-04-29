@@ -8,10 +8,10 @@
   ],
   "compilerOptions": {
     "paths": {
-      "discourse/plugins/discourse-surveys/*": [
+      "discourse/plugins/privateSurvey/*": [
         "./assets/javascripts/*"
       ],
-      "discourse/plugins/discourse-surveys/admin/*": [
+      "discourse/plugins/privateSurvey/admin/*": [
         "./admin/assets/javascripts/admin/*"
       ],
       "admin/*": ["./node_modules/discourse/declarations/admin/*"],

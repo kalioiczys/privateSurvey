@@ -18,7 +18,7 @@ register_svg_icon "far-square"
 
 require_relative "lib/discourse_surveys/engine"
 
-add_admin_route("discourse_surveys.admin.title", "discourse-surveys", { use_new_show_route: true })
+add_admin_route("discourse_surveys.admin.title", "privateSurvey", { use_new_show_route: true })
 
 after_initialize do
   require_relative "app/controller/discourse_surveys/survey_controller"
