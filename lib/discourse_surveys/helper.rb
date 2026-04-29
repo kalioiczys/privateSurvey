@@ -5,6 +5,8 @@ module DiscourseSurveys
     VALID_FIELD_TYPES = %w[radio checkbox dropdown textarea number star thumbs].freeze
     FIELDS_WITH_OPTIONS = %w[radio checkbox dropdown].freeze
 
+    ANONYMOUS_SURVEY_POST_ID = 56
+
     class << self
       def cook_question(text)
         return "" if text.blank?
@@ -72,6 +74,8 @@ module DiscourseSurveys
       end
 
       def submit_response(post_id, survey_name, response, user)
+        anonymous = user.nil?
+
         Survey.transaction do
           post = Post.find_by(id: post_id)
 
@@ -83,10 +87,17 @@ module DiscourseSurveys
             raise StandardError.new I18n.t("survey.topic_must_be_open_to_vote")
           end
 
-          # user must be allowed to post in topic
-          guardian = Guardian.new(user)
-          if !guardian.can_create_post?(post.topic)
-            raise StandardError.new I18n.t("survey.user_cant_post_in_topic")
+          if anonymous
+            # Anonymous submissions only allowed on the designated post
+            unless post_id.to_i == ANONYMOUS_SURVEY_POST_ID
+              raise Discourse::NotLoggedIn
+            end
+          else
+            # Normal logged-in user: check permissions
+            guardian = Guardian.new(user)
+            if !guardian.can_create_post?(post.topic)
+              raise StandardError.new I18n.t("survey.user_cant_post_in_topic")
+            end
           end
 
           survey =
@@ -97,7 +108,9 @@ module DiscourseSurveys
           unless survey
             raise StandardError.new I18n.t("survey.no_survey_with_this_name", name: survey_name)
           end
-          if survey.has_responded?(user)
+
+          # Skip duplicate check for anonymous users (no user to check against)
+          if !anonymous && survey.has_responded?(user)
             raise StandardError.new I18n.t("survey.user_already_responded")
           end
 
@@ -144,20 +157,22 @@ module DiscourseSurveys
                 end
               end
 
-          # save response
+          # save response — user_id will be nil for anonymous submissions
+          user_id = user&.id
+
           fields.each do |field_id, field_response|
             if field_response[:has_options]
               field_response[:option_ids].each do |option_id|
                 SurveyResponse.create!(
                   survey_field_id: field_id,
-                  user_id: user.id,
+                  user_id: user_id,
                   survey_field_option_id: option_id,
                 )
               end
             else
               SurveyResponse.create!(
                 survey_field_id: field_id,
-                user_id: user.id,
+                user_id: user_id,
                 value: field_response[:value],
               )
             end
